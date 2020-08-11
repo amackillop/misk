@@ -239,9 +239,10 @@ class DockerTidbCluster(
   }
 
   override fun stop() {
-    logger.info("Leaving TiDB docker container running in the background. " +
-        "If you need to kill it because you messed up migrations or something use:" +
-        "\n\tdocker kill ${CONTAINER_NAME}")
+    val containerId = containerId
+    if (containerId != null) {
+      docker.killContainerCmd(containerId);
+    }
   }
 
   class LogContainerResultCallback : ResultCallbackTemplate<LogContainerResultCallback, Frame>() {
